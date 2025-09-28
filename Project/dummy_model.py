@@ -20,7 +20,6 @@ class ResNetEmbedder(nn.Module):
         return x.view(x.size(0), -1)  # Flatten to (B, 2048)
         # x.size(0) 은 Batch 사이즈는 유지하면서 자동으로 남은 (1,1) flatten 된 차원을 뜻하는 -1. → 을 삭제한다.
 
-
 class ImageRelationClassifier(nn.Module):
     def __init__(self):
         super().__init__()
@@ -45,6 +44,7 @@ class ImageRelationClassifier(nn.Module):
 def make_model(model_weight):
     model = ImageRelationClassifier()
     model.load_state_dict(torch.load(model_weight))
+    model.eval()
     return model
 
 def recommend_cody(top, bottom, model):
@@ -55,6 +55,8 @@ def recommend_cody(top, bottom, model):
     top_score = 0
     cody_top = None
     cody_bottom = None
+    
+    items = []
     for t in top:
         for j in bottom:
             img1 = Image.open(f"static/uploads/{t}")
@@ -66,7 +68,10 @@ def recommend_cody(top, bottom, model):
                 top_score = score
                 cody_top = t
                 cody_bottom = j
-    return top_score, cody_top, cody_bottom
+                items.append({"cody_top":cody_top, "cody_bottom":bottom, "score":score})
+    # 코디를 score 순으로 정렬
+    items.sort(key= lambda x : x['score'], reverse=True)
+    return top_score, cody_top, cody_bottom, items
             
             
 def classify_clothes(filepath,cls_model):

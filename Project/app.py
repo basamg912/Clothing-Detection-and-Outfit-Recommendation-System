@@ -104,14 +104,20 @@ def recommend():
     bottom = [it['filename'] for it in category_items['bottom']]
     shoe = [it['filename'] for it in category_items['shoe']]
     outer = [it['filename'] for it in category_items['outer']]
-    # 여기서 코디 추천 프로그램으로 top_img, bottom_img, shoe_img 계산해서 넘겨주면 된다.
-    score, cody_top, cody_bottom = recommend_cody(top,bottom,recommend_model)
-    print(cody_top, cody_bottom)
+    # ---------
+    # 날씨 기반 옷 색깔 결정 후 해당 색에 알맞는 의류를 걸러내서 recommend_cody 에 input
+    # top / bottom 재구성
+    # ---------
+    
+    score, cody_top, cody_bottom, sorted_cody = recommend_cody(top,bottom,recommend_model)
+    print(sorted_cody)
     if not top or not bottom:
         return render_template('recommend.html', top = None, bottom= None, shoe=None, outer=None)
+    
     top_img = cody_top
     bottom_img = cody_bottom
     score = int(score*10)
+    
     if shoe:
         shoe_img = shoe[0]    
         if outer:
