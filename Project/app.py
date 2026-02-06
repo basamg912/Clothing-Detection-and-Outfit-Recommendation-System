@@ -21,8 +21,8 @@ PAGE_MAP = {
     'women shoes':  'shoe'
 }
 
-cls_model = YOLO("/Users/basamg/KW_2025/ML/fine_tune_yolo.pt")
-recommend_model = make_model('/Users/basamg/KW_2025/ML/Project/cody_recommend(second_train).pth')
+cls_model = YOLO("fine_tune_yolo.pt")
+recommend_model = make_model('cody_recommend(second_train).pth')
 
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
