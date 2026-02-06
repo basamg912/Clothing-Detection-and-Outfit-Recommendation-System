@@ -16,7 +16,8 @@ This idea was begining from Machine Learning's ensemble method. So, I want to mi
 
 1. Clone this repo
 
-```$ git clone https://github.com/basamg912/Clothing-Detection-and-Outfit-Recommendation-System.git
+```
+$ git clone https://github.com/basamg912/Clothing-Detection-and-Outfit-Recommendation-System.git
 ```
 
 2. Activate conda environment 
