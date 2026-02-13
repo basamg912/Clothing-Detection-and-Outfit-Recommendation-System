@@ -1,38 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>옷장</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
-    <div class="container py-5">
-        <h1 class="mb-4 text-secondary">카테고리별 의류</h1>
-        <a href="/" class="btn btn-outline-secondary mb-3"> 메인으로 돌아가기</a>
+{% extends "base.html" %}
+{% block title %}옷장{% endblock %}
 
-        <a href="/recommend" class="btn btn-success mb-3">코디 추천 받기</a>
+{% block content %}
+<div class="page-header fade-in">
+    <h1 class="page-title">👔 나의 옷장</h1>
+    <p class="page-subtitle">카테고리별로 등록된 의류를 확인하세요</p>
+</div>
 
-        <a href="/top" class="btn btn-outline-primary mb-3"> TOP </a> 
-        <a href="/bottom" class="btn btn-outline-primary mb-3"> BOTTOM </a> 
-        <a href="/outer" class="btn btn-outline-primary mb-3">OUTER </a> 
-        <a href="/shoe" class="btn btn-outline-primary mb-3"> SHOE </a> 
-        {% for category, items in clothes.items() %}
-            <h2 class="mt-4">{{category}}</h2>
-            {% if items %}
-                <div class="row">
-                    {% for it in items%}
-                        <div class="col-3 mb-3">
-                            <img src = "{{ url_for('static',filename='uploads/'+it['filename']) }}" class='img-thumbnail' alt="{{it ['filename']}}" >
-                        </div>
-                    {% endfor %}
-                </div>
-            {% else%}
-                <p> 등록된  {{category}} 아이템이 없습니다. </p>
-            {% endif%}
-        {% endfor %}
-        
-        <div class="row">
+<!-- Category Tabs -->
+<div class="category-tabs fade-in fade-in-delay-1">
+    <a href="/top" class="category-tab">👕 TOP</a>
+    <a href="/bottom" class="category-tab">👖 BOTTOM</a>
+    <a href="/outer" class="category-tab">🧥 OUTER</a>
+    <a href="/shoe" class="category-tab">👟 SHOE</a>
+</div>
+
+<!-- Action Buttons -->
+<div style="display: flex; gap: 12px; margin-bottom: 32px;" class="fade-in fade-in-delay-1">
+    <a href="/" class="btn-ghost">🏠 메인으로</a>
+    <a href="/recommend" class="btn-success-modern">✨ 코디 추천 받기</a>
+</div>
+
+<!-- Category Sections -->
+{% for category, items in clothes.items() %}
+<section class="fade-in fade-in-delay-2" style="margin-bottom: 40px;">
+    <h2
+        style="font-size: 20px; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary);">
+        {% if category == 'top' %}👕{% elif category == 'bottom' %}👖{% elif category == 'outer' %}🧥{% else %}👟{%
+        endif %}
+        {{ category }}
+    </h2>
+    {% if items %}
+    <div class="items-grid">
+        {% for it in items %}
+        <div class="item-card">
+            <div class="item-img-wrap">
+                <img src="{{ url_for('static', filename='uploads/' + it['filename']) }}" alt="{{ it['filename'] }}">
+            </div>
+            <div class="item-body">
+                <div class="item-name">{{ it['filename'] }}</div>
+                <span class="badge-pill badge-category">{{ it['raw'] }}</span>
+                <span class="badge-pill badge-color">{{ it['color'] }}</span>
+            </div>
         </div>
-        
+        {% endfor %}
     </div>
-</body>
-</html>
+    {% else %}
+    <div class="empty-state" style="padding: 30px;">
+        <div class="empty-icon">📂</div>
+        <div class="empty-text">등록된 {{ category }} 아이템이 없습니다</div>
+        <div class="empty-sub">홈에서 사진을 업로드하여 의류를 추가하세요</div>
+    </div>
+    {% endif %}
+</section>
+{% endfor %}
+{% endblock %}
